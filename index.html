@@ -5,10 +5,59 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script src="app.js"></script>
     <title>Library</title>
 </head>
 <body>
-    
+    <div id="wrapper">
+        <div id="header">
+                <div class="logo">
+                    <i class="material-icons">book</i>
+                    <h1>Library</h1>
+                </div>
+                <button class="new-book" onclick='toggleModal()'>+Add Book</button>
+        </div>
+        <div class="main-content">
+
+        </div>
+    </div>
+
+    <div class="modal hidden">
+        <div class="modal-content">
+                <!-- <form id="bookForm" onsubmit="validateForm()"> -->
+                <div class="form-flex">
+                    <div class="input-flex" id="title-div">
+                        <label for="book-title">title</label>
+                        <input type="text" id="book-title">
+                        <span class="hidden emptySpan">Please enter non-empty field.</span>
+                    </div>
+                    <div class="input-flex" id="author-div">
+                        <label for="book-author">author</label>
+                        <input type="text" id="book-author">
+                        <span class="hidden emptySpan">Please enter non-empty field.</span>
+                    </div>
+                    <div class="input-flex " id="pages-div">
+                        <label for="book-pages">number of pages</label>
+                        <input type="number" name="" id="book-pages">
+                        <span class="hidden emptySpan">Please enter a number.</span>
+                    </div>
+                    <div class="read-flex">
+                        <span>Have you read this book?</span>
+                        <div class="radio-wrapper">
+                            <input type="radio" name="read-status" id="read-true" value="Read">
+                            <label for="read-true">Read</label>
+                        </div>
+                        <div class="radio-wrapper">
+                                <input type="radio" name="read-status" id="read-false" value="Unread">
+                                <label for="read-false">Unread</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="modal-btn" onclick="validateForm()">Submit</button>
+                    <button class="modal-btn" onclick="toggleModal()">Cancel</button>
+                </div>
+            <!-- </form> -->
+        </div>
+    </div>
 </body>
 </html>
