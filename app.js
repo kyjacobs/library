@@ -9,7 +9,7 @@ function Book(title, author, pages, readOrUnread) {
     this.index = libIndex;
     this.getInfo = function() {
         console.log(title + " by " + author + ", " + pages + ", " + (readOrUnread === "Read" ? "read" : "unread"));
-        console.log("Library Index: " + libIndex);
+        console.log("Library Index: " + this.index);
     }
 }
 
@@ -19,24 +19,6 @@ Book.prototype.updateReadStatus = function() {
     }
     else {
         this.readOrUnread = "Read";
-    }
-}
-
-
-function toggleReadStatus(event) {
-    const button = document.querySelector(`#${event.currentTarget.id}`);
-    const ind = parseInt(`${event.currentTarget.id}`.slice(7));
-    if(button.classList.contains('read')) {
-        button.classList.remove('read');
-        button.classList.add('unread');
-        button.textContent = "Unread";
-        myLibrary[ind].updateReadStatus();
-    }
-    else {
-        button.classList.remove('unread');
-        button.classList.add('read');
-        button.textContent = "Read";
-        myLibrary[ind].updateReadStatus();
     }
 }
 
@@ -64,23 +46,67 @@ function addBookToLibrary() {
     myLibrary.push(newBook);
     console.log(myLibrary[myLibrary.length-1].getInfo());
 
-    // Append new book card to DOM
-    createCard(newBook);
-    libIndex += 1;
+    resetDisplay();
     toggleModal();
     clearInputs();
 }
 
+function deleteBook(event) {
+
+    // Grab index of array through click event and removing from myLibrary, then decrementing global index.
+    const ind = parseInt(`${event.currentTarget.id}`.slice(11));
+    myLibrary.splice(ind, 1);
+    libIndex--;
+
+    // Updating the index in each object of myLibrary
+    for (let i = 0; i < myLibrary.length; i++) {
+        myLibrary[i].index = i;
+    }
+
+    resetDisplay();
+}
+
+
+function toggleReadStatus(event) {
+    const button = document.querySelector(`#${event.currentTarget.id}`);
+    const ind = parseInt(`${event.currentTarget.id}`.slice(7));
+    if(button.classList.contains('read')) {
+        button.classList.remove('read');
+        button.classList.add('unread');
+        button.textContent = "Unread";
+        myLibrary[ind].updateReadStatus();
+    }
+    else {
+        button.classList.remove('unread');
+        button.classList.add('read');
+        button.textContent = "Read";
+        myLibrary[ind].updateReadStatus();
+    }
+}
+
+function displayLibrary(){
+
+    // Append new book card to DOM
+    for(let i = 0; i < myLibrary.length; i++){
+        createCard(myLibrary[i]);
+        libIndex += 1;
+    }
+}
+
+function resetDisplay() {
+    
+    const mainContent = document.querySelector('.main-content');
+    libIndex = 0;
+
+    while(mainContent.firstChild) {
+        mainContent.removeChild(mainContent.firstChild);
+    }
+
+    displayLibrary();
+
+}
 
 function validateForm() {
-
-    // Getting all input-divs from the form
-    const inputBoxes = document.querySelectorAll('.input-flex');
-    let inputArray = [];
-
-    inputBoxes.forEach((input) => {
-        inputArray.push(input);
-    });
 
     // Getting the user input
     const title = document.getElementById('book-title');
@@ -134,10 +160,14 @@ function clearInputs() {
     const title = document.getElementById('book-title');
     const author = document.getElementById('book-author');
     const pages = document.getElementById('book-pages');
+    const radio1 = document.getElementById('read-true');
+    const radio2 = document.getElementById('read-false');
 
     title.value = "";
     author.value = "";
     pages.value = ""; 
+    radio1.checked = false;
+    radio2.checked = false;
 }
 
 function toggleModal() {
@@ -158,6 +188,9 @@ function createCard(book){
     const span1 = document.createElement('span');
     const span2 = document.createElement('span');
     const button = document.createElement('button');
+    const delButton = document.createElement('button');
+    const flexDiv = document.createElement('div');
+    const delButtonIcon = document.createElement('i');
 
     card.classList.add('card');
     card.setAttribute('id', `index-${book.index}`);
@@ -170,6 +203,11 @@ function createCard(book){
     span2.classList.add('shrink');
     span1.classList.add('flex-item');
     span2.classList.add('flex-item');
+    flexDiv.classList.add('flexDiv');
+    delButtonIcon.classList.add("material-icons");
+    delButtonIcon.textContent = "close";
+    delButton.classList.add('readOrUnread');
+    delButton.setAttribute('id', `del-button-${book.index}`);
 
     h2.textContent = book.title;
     span1.textContent = book.author;
@@ -180,16 +218,21 @@ function createCard(book){
         button.classList.add("read");
     }
     else {
+        button.textContent = "Unread";
         button.classList.add("unread");
     }
 
     button.addEventListener("click", toggleReadStatus);
+    delButton.addEventListener("click", deleteBook);
 
     title.appendChild(h2);
     card.append(title);
     card.append(span1);
     card.append(span2);
-    card.append(button);
+    delButton.append(delButtonIcon);
+    flexDiv.append(button);
+    flexDiv.append(delButton);
+    card.append(flexDiv);
 
     const mainContent = document.querySelector('.main-content');
     mainContent.append(card);

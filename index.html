@@ -16,7 +16,7 @@
                     <i class="material-icons">book</i>
                     <h1>Library</h1>
                 </div>
-                <button class="new-book" onclick='toggleModal()'>+Add Book</button>
+                <button class="new-book" onclick='toggleModal()'>+ New Book</button>
         </div>
         <div class="main-content">
 
@@ -29,7 +29,7 @@
                 <div class="form-flex">
                     <div class="input-flex" id="title-div">
                         <label for="book-title">title</label>
-                        <input type="text" id="book-title">
+                        <input type="text" id="book-title" maxlength="50">
                         <span class="hidden emptySpan">Please enter non-empty field.</span>
                     </div>
                     <div class="input-flex" id="author-div">
@@ -53,7 +53,7 @@
                                 <label for="read-false">Unread</label>
                         </div>
                     </div>
-                    <button type="submit" class="modal-btn" onclick="validateForm()">Submit</button>
+                    <button type="submit" class="modal-btn prp" onclick="validateForm()">Submit</button>
                     <button class="modal-btn" onclick="toggleModal()">Cancel</button>
                 </div>
             <!-- </form> -->
